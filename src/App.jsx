@@ -63,28 +63,28 @@ const METRICS = [
 
 const tabInfo = {
   general: {
-    title: 'General Accuracy Distribution',
+    titleTemplate: 'General {metric} Distribution',
     desc: 'Overall success rate across all 127 redstone circuit challenges',
     icon: 'redstone',
     heading: 'General Overview',
     body: 'The general benchmark aggregates scores across all test categories — spatial reasoning, circuit logic, tick timing, and complex builds. Models are placed in a live Minecraft 3D environment and must build working redstone contraptions from scratch.',
   },
   logic: {
-    title: 'Logic Gate Accuracy',
+    titleTemplate: 'Logic Gate {metric}',
     desc: 'Success rate on AND, OR, NOT, and XOR gate construction',
     icon: 'repeater',
     heading: 'Circuit Logic',
     body: 'Tests the model\'s ability to construct fundamental logic gates using redstone. Minecraft redstone has unique constraints: signals decay over 15 blocks, repeaters add tick delays, and comparators enable analog signal processing. Models must reason about these rules to build functional circuits.',
   },
   static: {
-    title: 'Static Movement Accuracy',
+    titleTemplate: 'Static Movement {metric}',
     desc: 'Piston, door, and trapdoor mechanism construction',
     icon: 'piston',
     heading: 'Static Movement',
     body: 'Evaluates contraptions that use pistons, sticky pistons, and slime/honey blocks to create mechanical movement. Models must understand block pushing limits (12 blocks max), quasi-connectivity, and the unique interaction between pistons and different block types.',
   },
   dynamic: {
-    title: 'Dynamic Movement Accuracy',
+    titleTemplate: 'Dynamic Movement {metric}',
     desc: 'Flying machines, item transport, and state machines',
     icon: 'slime',
     heading: 'Dynamic Movement',
@@ -566,6 +566,65 @@ function FilterPanel({ models, visible, onToggle, enabledModels, setEnabledModel
   )
 }
 
+/* ---- Coming Soon Modal ---- */
+function ComingSoonModal({ visible, onClose }) {
+  return (
+    <div className={`cs-overlay ${visible ? 'cs-overlay--visible' : ''}`} onClick={onClose}>
+      <div className="cs-card" onClick={e => e.stopPropagation()}>
+        {/* Top accent bar */}
+        <div className="cs-accent-bar" />
+
+        {/* Header */}
+        <div className="cs-header">
+          <div className="cs-logo">
+            <span className="cs-logo-red">REDSTONE</span>
+            <span className="cs-logo-white">BENCH</span>
+          </div>
+          <button className="cs-close" onClick={onClose} aria-label="Close">✕</button>
+        </div>
+
+        {/* Body */}
+        <div className="cs-body">
+          <h2 className="cs-headline">Benchmarks Not Yet Run</h2>
+          <p className="cs-desc">
+            This is the results page for <strong>Redstone Bench</strong>, a benchmark that
+            evaluates AI models on their ability to build working redstone circuits in Minecraft.
+          </p>
+          <p className="cs-desc">
+            All scores and rankings shown on this page are{' '}
+            <strong>placeholder mockup data</strong> used to preview the final interface.
+          </p>
+
+          {/* Coming Soon callout */}
+          <div className="cs-coming-soon">
+            <span className="cs-coming-soon-dot" />
+            <span>COMING SOON</span>
+          </div>
+        </div>
+
+        {/* Footer — follow on X */}
+        <div className="cs-footer">
+          <span className="cs-footer-text">
+            Follow for updates &amp; bench results
+          </span>
+          <a
+            href="https://x.com/dirk_does"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="cs-x-btn"
+            aria-label="Follow @dirk_does on X"
+          >
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+              <path d="M21.742 21.75l-7.563-11.179 7.056-8.321h-2.456l-5.691 6.714-4.54-6.714H2.359l7.29 10.776L2.25 21.75h2.456l6.035-7.118 4.818 7.118h6.191-.008zM7.739 3.818L18.81 20.182h-2.447L5.29 3.818h2.447z" />
+            </svg>
+            @dirk_does
+          </a>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function App() {
   const [activeTab, setActiveTab]       = useState('general')
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -573,6 +632,12 @@ export default function App() {
   const [activeMetric, setActiveMetric] = useState('score')
   const [filterOpen, setFilterOpen]     = useState(false)
   const [enabledModels, setEnabledModels] = useState(() => new Set(baseModels.map(m => m.name)))
+  const [modalVisible, setModalVisible]   = useState(false)
+
+  useEffect(() => {
+    const t = setTimeout(() => setModalVisible(true), 1000)
+    return () => clearTimeout(t)
+  }, [])
 
   const tabs = [
     { id: 'general', label: 'General' },
@@ -593,6 +658,8 @@ export default function App() {
   }, [models, activeMetric, enabledModels])
 
   const info = tabInfo[activeTab]
+  const metricLabel = METRICS.find(m => m.id === activeMetric)?.label ?? 'Accuracy'
+  const cardTitle = info.titleTemplate.replace('{metric}', metricLabel)
 
   // Close filter panel on outside click
   const filterRef = useRef(null)
@@ -609,6 +676,7 @@ export default function App() {
   return (
     <>
       <GridBackground />
+      <ComingSoonModal visible={modalVisible} onClose={() => setModalVisible(false)} />
 
       <div className="page">
         {/* Header */}
@@ -674,7 +742,7 @@ export default function App() {
           <div className="card">
             <div className="card-header">
               <div>
-                <div className="card-title">{info.title}</div>
+                <div className="card-title">{cardTitle}</div>
                 <div className="card-desc">{info.desc}</div>
               </div>
 

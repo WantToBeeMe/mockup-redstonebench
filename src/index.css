@@ -698,3 +698,220 @@ body {
     text-align: left;
   }
 }
+
+/* ============ COMING SOON MODAL ============ */
+
+@keyframes cs-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes cs-card-in {
+  from { opacity: 0; transform: translateY(28px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+@keyframes cs-dot-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(239,68,68,0.7); }
+  50%       { opacity: 0.7; box-shadow: 0 0 0 6px rgba(239,68,68,0); }
+}
+
+.cs-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  /* hidden state */
+  opacity: 0;
+  pointer-events: none;
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  background: rgba(0, 0, 0, 0);
+  transition:
+    opacity 0.5s ease,
+    backdrop-filter 0.6s ease,
+    -webkit-backdrop-filter 0.6s ease,
+    background 0.5s ease;
+}
+
+.cs-overlay--visible {
+  opacity: 1;
+  pointer-events: auto;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.cs-overlay--visible .cs-card {
+  animation: cs-card-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cs-card {
+  position: relative;
+  background: #0d0d0d;
+  border: 1px solid #1f1f1f;
+  width: 100%;
+  max-width: 520px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(239,68,68,0.08),
+    0 32px 80px rgba(0,0,0,0.75),
+    0 0 60px rgba(239,68,68,0.05);
+}
+
+.cs-accent-bar {
+  width: 100%;
+  height: 3px;
+  background: #ef4444;
+}
+
+.cs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.4rem 1.8rem 0.6rem;
+}
+
+.cs-logo {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.cs-logo-red   { color: #ef4444; }
+.cs-logo-white { color: #ffffff; }
+
+.cs-close {
+  background: none;
+  border: 1px solid #262626;
+  color: #525252;
+  font-size: 0.85rem;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.cs-close:hover {
+  color: #ef4444;
+  border-color: #ef4444;
+  background: rgba(239,68,68,0.06);
+}
+
+.cs-body {
+  padding: 1.4rem 1.8rem;
+}
+
+.cs-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Minecraft', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ef4444;
+  border: 1px solid rgba(239,68,68,0.3);
+  background: rgba(239,68,68,0.06);
+  padding: 0.25rem 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.cs-headline {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.cs-desc {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.7rem;
+  line-height: 1.75;
+  color: #636363;
+  margin-bottom: 0.75rem;
+}
+
+.cs-desc strong {
+  color: #a3a3a3;
+  font-weight: 600;
+}
+
+.cs-coming-soon {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 1.4rem;
+  font-family: 'Minecraft', monospace;
+  font-size: 1.05rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ef4444;
+}
+
+.cs-coming-soon-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ef4444;
+  flex-shrink: 0;
+  animation: cs-dot-pulse 1.8s ease-in-out infinite;
+}
+
+.cs-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.8rem;
+  border-top: 1px solid #1f1f1f;
+  background: #141414;
+}
+
+.cs-footer-text {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.62rem;
+  color: #737373;
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+}
+
+.cs-x-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+  height: 32px;
+  padding: 0 0.9rem;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #737373;
+  background: transparent;
+  border: 1px solid #262626;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.cs-x-btn:hover {
+  color: #fff;
+  border-color: #404040;
+  background: #111;
+}
+
